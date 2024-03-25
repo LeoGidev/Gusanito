@@ -9,4 +9,5 @@ document.addEventListener('DOMContentLoaded', () => {
   let dx = 0;
   let dy = 0;
   let score = 0;
-}///
+
+})///
