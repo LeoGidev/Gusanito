@@ -54,6 +54,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     requestAnimationFrame(draw);
   }
-  
+
+  function gameOver() {
+    alert(`Game Over! Your score is ${score}`);
+    document.location.reload();
+  }
+
+  document.addEventListener('keydown', event => {
+    const keyPressed = event.key;
+
+    if (keyPressed === 'ArrowUp' && dy === 0) {
+      dx = 0;
+      dy = -1;
+    } else if (keyPressed === 'ArrowDown' && dy === 0) {
+      dx = 0;
+      dy = 1;
+    } else if (keyPressed === 'ArrowLeft' && dx === 0) {
+      dx = -1;
+      dy = 0;
+    } else if (keyPressed === 'ArrowRight' && dx === 0) {
+      dx = 1;
+      dy = 0;
+    }
+  });
+
+  draw();
+});
 
 })///
