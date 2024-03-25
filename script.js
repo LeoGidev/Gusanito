@@ -7,9 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let snake = [{ x: 10, y: 10 }];
     let food = generateFood();
   
-    let dx = 0;
+    let dx = 1;
     let dy = 0;
     let score = 0;
+    let lastDirection = 'right'; // Added to keep track of last direction
   
     function generateFood() {
       return {
@@ -21,18 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-      // Draw snake
-      ctx.fillStyle = '#000';
-      snake.forEach(segment => {
-        ctx.fillRect(segment.x * boxSize, segment.y * boxSize, boxSize, boxSize);
-      });
-  
-      // Draw food
-      ctx.fillStyle = '#f00';
-      ctx.fillRect(food.x * boxSize, food.y * boxSize, boxSize, boxSize);
-  
       // Move snake
       const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+  
+      // Check if snake hits walls or itself
+      if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize || snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+        gameOver();
+        return;
+      }
+  
+      // Draw snake
       snake.unshift(head);
   
       // Check if snake eats food
@@ -43,11 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
         snake.pop();
       }
   
-      // Check if snake hits walls or itself
-      if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize || snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)) {
-        gameOver();
-        return;
-      }
+      // Draw food
+      ctx.fillStyle = '#f00';
+      ctx.fillRect(food.x * boxSize, food.y * boxSize, boxSize, boxSize);
+  
+      // Draw snake
+      ctx.fillStyle = '#000';
+      snake.forEach(segment => {
+        ctx.fillRect(segment.x * boxSize, segment.y * boxSize, boxSize, boxSize);
+      });
   
       // Display score
       ctx.fillStyle = '#000';
@@ -64,18 +67,22 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', event => {
       const keyPressed = event.key;
   
-      if (keyPressed === 'ArrowUp' && dy === 0) {
+      if (keyPressed === 'ArrowUp' && lastDirection !== 'down') {
         dx = 0;
         dy = -1;
-      } else if (keyPressed === 'ArrowDown' && dy === 0) {
+        lastDirection = 'up';
+      } else if (keyPressed === 'ArrowDown' && lastDirection !== 'up') {
         dx = 0;
         dy = 1;
-      } else if (keyPressed === 'ArrowLeft' && dx === 0) {
+        lastDirection = 'down';
+      } else if (keyPressed === 'ArrowLeft' && lastDirection !== 'right') {
         dx = -1;
         dy = 0;
-      } else if (keyPressed === 'ArrowRight' && dx === 0) {
+        lastDirection = 'left';
+      } else if (keyPressed === 'ArrowRight' && lastDirection !== 'left') {
         dx = 1;
         dy = 0;
+        lastDirection = 'right';
       }
     });
   
