@@ -10,4 +10,50 @@ document.addEventListener('DOMContentLoaded', () => {
   let dy = 0;
   let score = 0;
 
+  function generateFood() {
+    return {
+      x: Math.floor(Math.random() * gridSize),
+      y: Math.floor(Math.random() * gridSize)
+    };
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw snake
+    ctx.fillStyle = '#000';
+    snake.forEach(segment => {
+      ctx.fillRect(segment.x * boxSize, segment.y * boxSize, boxSize, boxSize);
+    });
+
+    // Draw food
+    ctx.fillStyle = '#f00';
+    ctx.fillRect(food.x * boxSize, food.y * boxSize, boxSize, boxSize);
+
+    // Move snake
+    const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+    snake.unshift(head);
+
+    // Check if snake eats food
+    if (head.x === food.x && head.y === food.y) {
+      score++;
+      food = generateFood();
+    } else {
+      snake.pop();
+    }
+
+    // Check if snake hits walls or itself
+    if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize || snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)) {
+      gameOver();
+      return;
+    }
+
+    // Display score
+    ctx.fillStyle = '#000';
+    ctx.fillText(`Score: ${score}`, 10, 20);
+
+    requestAnimationFrame(draw);
+  }
+  
+
 })///
