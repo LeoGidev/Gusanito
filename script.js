@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let score = 0;
     let lastDirection = 'right'; // Added to keep track of last direction
   
+    let gameSpeed = 500; 
+    let gameInterval; // Used to store interval ID
+  
     function generateFood() {
       return {
         x: Math.floor(Math.random() * gridSize),
@@ -55,11 +58,20 @@ document.addEventListener('DOMContentLoaded', () => {
       // Display score
       ctx.fillStyle = '#000';
       ctx.fillText(`Score: ${score}`, 10, 20);
+    }
   
-      requestAnimationFrame(draw);
+    function startGame() {
+      gameInterval = setInterval(() => {
+        draw();
+      }, gameSpeed);
+    }
+  
+    function stopGame() {
+      clearInterval(gameInterval);
     }
   
     function gameOver() {
+      stopGame();
       alert(`Game Over! Your score is ${score}`);
       document.location.reload();
     }
@@ -86,6 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   
-    draw();
+    startGame(); // Start the game
   });
   
