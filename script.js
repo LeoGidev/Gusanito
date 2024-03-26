@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let dx = 1;
     let dy = 0;
     let score = 0;
-    let lastDirection = 'right'; // Added to keep track of last direction
+    let lastDirection = 'right'; //ultima direccion
   
     let gameSpeed = 500; 
-    let gameInterval; // Used to store interval ID
+    let gameInterval; 
   
     function generateFood() {
       return {
@@ -25,19 +25,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-      // Move snake
+      // mueve el gusano
       const head = { x: snake[0].x + dx, y: snake[0].y + dy };
   
-      // Check if snake hits walls or itself
+      // Revisa si el gusano se choca así mismo a en las paredes
       if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize || snake.some(segment => segment.x === head.x && segment.y === head.y)) {
         gameOver();
         return;
       }
   
-      // Draw snake
+      // Dibuja el gusano
       snake.unshift(head);
   
-      // Check if snake eats food
+      // Reisa si el gusano come un cuaadro
       if (head.x === food.x && head.y === food.y) {
         score++;
         food = generateFood();
@@ -45,17 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
         snake.pop();
       }
   
-      // Draw food
+      // Dibuja cuadros comida
       ctx.fillStyle = '#f00';
       ctx.fillRect(food.x * boxSize, food.y * boxSize, boxSize, boxSize);
   
-      // Draw snake
+      // Dibuja gusano
       ctx.fillStyle = '#000';
       snake.forEach(segment => {
         ctx.fillRect(segment.x * boxSize, segment.y * boxSize, boxSize, boxSize);
       });
   
-      // Display score
+      // Muestra el score
       ctx.fillStyle = '#000';
       ctx.fillText(`Score: ${score}`, 10, 20);
     }
@@ -98,6 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   
-    startGame(); // Start the game
+    startGame(); // Inicia el juego
   });
   
